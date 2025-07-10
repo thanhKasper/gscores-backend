@@ -1,13 +1,17 @@
+using GScores.Core.ServiceContracts;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GScores.UI.Controllers;
 
-public class ScoresController : BaseApiController
+public class ScoresController(IReadScoreService readScoreService) : BaseApiController
 {
-    [HttpGet]
-    public IActionResult GetScores()
+    private readonly IReadScoreService _readScoreService = readScoreService;
+
+    
+    [HttpGet("{studentId}")]
+    public async Task<IActionResult> GetScores(string? studentId)
     {
         // Logic to retrieve scores
-        return Ok(new[] { 100, 200, 300 });
+        return Ok(await _readScoreService.GetScoresAsync(studentId));
     }
 }
