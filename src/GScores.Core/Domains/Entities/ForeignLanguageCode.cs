@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace GScores.Core.Domains;
+namespace GScores.Core.Domains.Entities;
 
 // Violate the 3NF if combined this into Student table
 public class ForeignLanguageCode

@@ -2,7 +2,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace GScores.Core.Domains;
+namespace GScores.Core.Domains.Entities;
 
 
 // Base on rule, if student not attending the subject, the score will be 0;

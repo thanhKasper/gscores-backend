@@ -1,4 +1,4 @@
-using GScores.Core.Domains;
+using GScores.Core.Domains.Entities;
 
 namespace GScores.Core.DTOs;
 

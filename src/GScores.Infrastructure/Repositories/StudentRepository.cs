@@ -1,4 +1,4 @@
-using GScores.Core.Domains;
+using GScores.Core.Domains.Entities;
 using GScores.Core.Domains.RepositoryContracts;
 using GScores.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;

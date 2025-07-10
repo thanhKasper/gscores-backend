@@ -1,4 +1,4 @@
-using GScores.Core.Domains;
+using GScores.Core.Domains.Entities;
 using GScores.Infrastructure.ScoresRead.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
