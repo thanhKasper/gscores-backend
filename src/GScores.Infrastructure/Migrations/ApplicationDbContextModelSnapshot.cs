@@ -28,7 +28,7 @@ namespace GScores.Infrastructure.Migrations
 
                     b.HasKey("ForeignCode");
 
-                    b.ToTable("ForeignLanguageCodes");
+                    b.ToTable("ForeignLanguageCodes", (string)null);
                 });
 
             modelBuilder.Entity("GScores.Core.Domains.Student", b =>
@@ -73,7 +73,7 @@ namespace GScores.Infrastructure.Migrations
 
                     b.HasIndex("ForeignLanguageCodeForeignCode");
 
-                    b.ToTable("Students");
+                    b.ToTable("Students", (string)null);
                 });
 
             modelBuilder.Entity("GScores.Core.Domains.Student", b =>

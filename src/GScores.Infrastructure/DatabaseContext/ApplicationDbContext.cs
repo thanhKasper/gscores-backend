@@ -28,8 +28,6 @@ public class ApplicationDbContext(
 
     public async Task SeedDataAsync(DbContext context)
     {
-        HashSet<string> foreignCodes = new();
-
         await foreach (var studentScore in _studentScoreReader.GetAllScoresAsync())
         {
             // Check if student already exists
@@ -38,27 +36,29 @@ public class ApplicationDbContext(
 
             Student newStudent = studentScore.ToStudent();
 
-            if (studentScore.ForeignCode != null)
-            {
-                var existingForeignCode = await context.Set<ForeignLanguageCode>()
-                    .FirstOrDefaultAsync(f => f.ForeignCode == studentScore.ForeignCode);
+            var existingForeignCode = await context.Set<ForeignLanguageCode>()
+                .FirstOrDefaultAsync(f => f.ForeignCode == studentScore.ForeignCode);
 
-                if (existingForeignCode == null && !foreignCodes.Contains(studentScore.ForeignCode))
+            if (!string.IsNullOrEmpty(studentScore.ForeignCode))
+            {
+
+                if (existingForeignCode == null)
                 {
                     existingForeignCode = new ForeignLanguageCode
                     {
                         ForeignCode = studentScore.ForeignCode
                     };
                     context.Set<ForeignLanguageCode>().Add(existingForeignCode);
-                    foreignCodes.Add(studentScore.ForeignCode);
                 }
 
-                newStudent.ForeignLanguageCode = existingForeignCode;
             }
 
+
+            newStudent.ForeignLanguageCode = existingForeignCode;
+
             context.Set<Student>().Add(newStudent);
+            await context.SaveChangesAsync();
         }
 
-        await context.SaveChangesAsync();
     }
 }
