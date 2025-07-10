@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GScores.Core.Domains;
 
@@ -6,6 +7,7 @@ namespace GScores.Core.Domains;
 public class ForeignLanguageCode
 {
     [Key]
+    [Column(TypeName = "varchar(3)")]
     public string? ForeignCode { get; set; }
     public List<Student> Students { get; set; } = [];
 }

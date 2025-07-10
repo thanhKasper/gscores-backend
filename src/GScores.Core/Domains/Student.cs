@@ -14,17 +14,17 @@ public class Student
     [Column(TypeName = "decimal(3, 1)")]
     [DefaultValue(0.0)]
     [Range(0.0, 10.0)]
-    public decimal? MathScore { get; set; }
+    public double? MathScore { get; set; }
 
     [Column(TypeName = "decimal(4, 2)")]
     [DefaultValue(0.0)]
     [Range(0.0, 10.0)]
-    public decimal? LiteratureScore { get; set; }
+    public double? LiteratureScore { get; set; }
 
     [Column(TypeName = "decimal(3, 1)")]
     [DefaultValue(0.0)]
     [Range(0.0, 10.0)]
-    public decimal? ForeignScore { get; set; }
+    public double? ForeignScore { get; set; }
 
     [Required]
     [DefaultValue(true)]
@@ -33,27 +33,27 @@ public class Student
     // These column will null if student choose Natural Science
     [Column(TypeName = "decimal(4, 2)")]
     [Range(0.0, 10.0)]
-    public decimal? HistoryScore { get; set; }
+    public double? HistoryScore { get; set; }
 
     [Column(TypeName = "decimal(4, 2)")]
     [Range(0.0, 10.0)]
-    public decimal? GeographyScore { get; set; }
+    public double? GeographyScore { get; set; }
     [Column(TypeName = "decimal(4, 2)")]
     [Range(0.0, 10.0)]
-    public decimal? CivicEducationScore { get; set; }
+    public double? CivicEducationScore { get; set; }
 
     // These column will null if student choose Social Science
     [Column(TypeName = "decimal(4, 2)")]
     [Range(0.0, 10.0)]
-    public decimal? PhysicsScore { get; set; }
+    public double? PhysicsScore { get; set; }
 
     [Column(TypeName = "decimal(4, 2)")]
     [Range(0.0, 10.0)]
-    public decimal? ChemistryScore { get; set; }
+    public double? ChemistryScore { get; set; }
 
     [Column(TypeName = "decimal(4, 2)")]
     [Range(0.0, 10.0)]
-    public decimal? BiologyScore { get; set; }
+    public double? BiologyScore { get; set; }
 
     // Navigation properties
     public ForeignLanguageCode? ForeignLanguageCode { get; set; }

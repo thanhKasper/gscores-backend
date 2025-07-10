@@ -1,3 +1,5 @@
+using GScores.Core.Domains;
+
 namespace GScores.Infrastructure.ScoresRead.Interfaces;
 
 public class StudentScore
@@ -13,4 +15,22 @@ public class StudentScore
     public double? GeographyScore { get; set; }
     public double? CivicEducationScore { get; set; }
     public string? ForeignCode { get; set; }
+
+    public Student ToStudent()
+    {
+        return new Student
+        {
+            StudentId = StudentId,
+            MathScore = MathScore,
+            LiteratureScore = LiteratureScore,
+            ForeignScore = ForeignScore,
+            PhysicsScore = PhysicsScore,
+            ChemistryScore = ChemistryScore,
+            BiologyScore = BiologyScore,
+            HistoryScore = HistoryScore,
+            GeographyScore = GeographyScore,
+            CivicEducationScore = CivicEducationScore,
+            IsNaturalScience = HistoryScore == null && GeographyScore == null && CivicEducationScore == null
+        };
+    }
 }
