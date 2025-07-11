@@ -14,6 +14,8 @@ builder.Services.AddScoped<IReadScoreService, ReadScoreService>();
 builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 builder.Services.AddScoped<IScoreStatisticRepositoryFactory, SubjectScoreStatisticRepositoryFactory>();
 builder.Services.AddScoped<IScoreStatistic, ScoreStatistics>();
+builder.Services.AddScoped<IGroupARankingRepository, GroupAScoreRankingRepository>();
+builder.Services.AddScoped<IGroupRankingService, GroupRankingService>();
 builder.Services.AddControllers();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {

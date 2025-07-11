@@ -57,4 +57,8 @@ public class Student
 
     // Navigation properties
     public ForeignLanguageCode? ForeignLanguageCode { get; set; }
+
+    // Business data not related to the database
+    [NotMapped]
+    public double? SumAGroupScore;
 }
