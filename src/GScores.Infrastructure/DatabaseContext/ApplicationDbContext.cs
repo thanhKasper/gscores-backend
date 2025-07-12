@@ -78,5 +78,9 @@ public class ApplicationDbContext(
         }
 
         await context.SaveChangesAsync(); // In case the last batch is not a full batch
+
+        Console.WriteLine("Seeding completed.");
+        Console.WriteLine($"Total students seeded: {await context.Set<Student>().CountAsync()}");
+        Console.WriteLine($"Total foreign language codes: {await context.Set<ForeignLanguageCode>().CountAsync()}");
     }
 }
