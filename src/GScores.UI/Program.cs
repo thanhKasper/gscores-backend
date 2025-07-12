@@ -6,6 +6,7 @@ using GScores.Infrastructure.DatabaseContext;
 using GScores.Infrastructure.Repositories;
 using GScores.Infrastructure.ScoresRead;
 using GScores.Infrastructure.ScoresRead.Interfaces;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,6 +25,36 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 });
 
 var app = builder.Build();
+
+// Apply migrations automatically on startup
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    if (context.Database.CanConnect() || !context.Database.GetPendingMigrations().Any())
+    {
+        try
+        {
+            if (context.Students.Any() && context.ForeignLanguageCodes.Any())
+            {
+                Console.WriteLine("Database already seeded, skipping seeding.");
+            }
+            else
+            {
+                Console.WriteLine("Seeding database...");
+                context.Database.EnsureCreated();
+            }
+        }
+        catch (SqlException)
+        {
+            Console.WriteLine("Failed to get access to the table, table not found");
+        }
+    }
+    else
+    {
+        Console.WriteLine("Seeding and migrate database...");
+        context.Database.Migrate();
+    }
+}
 
 app.UseCors(options =>
 {
