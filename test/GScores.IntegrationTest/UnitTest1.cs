@@ -1,4 +1,4 @@
-﻿namespace GScores.UnitTest;
+﻿namespace GScores.IntegrationTest;
 
 public class UnitTest1
 {
