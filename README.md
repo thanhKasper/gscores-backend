@@ -2,7 +2,11 @@
 
 ## How to install
 
+### Locally installed into machine
+
 Make sure that you have installed [.NET 9](https://dotnet.microsoft.com/en-us/download/dotnet/9.0)
+
+- Clone the repository
 
 ```bash
 # Clone the repository
@@ -10,7 +14,22 @@ git clone https://github.com/thanhKasper/gscores-backend.git
 
 # At the directory
 cd gscores-backend
+```
 
+- Add these lines into **src/GScores.UI/appsettings.json** or **src/GScores/UI/appsettings.Development.json**
+
+```json
+{
+  "ScoresFilePath": "Your path to the csv file",
+  "ConnectionStrings": {
+    "DefaultConnection": "SQL Server Connection String"
+  }
+}
+```
+
+- Build and run the project
+
+```bash
 # Setup project
 dotnet build
 
@@ -18,24 +37,14 @@ dotnet build
 dotnet run --project src/GScores.UI
 ```
 
-To seed the csv data into the database. Following these steps:
+### Using Docker
 
-- Add these lines into appSettings.json or appSettings.Development.json
-```json
-{
-    "ScoresFilePath": "Your path to the csv file",
-    "ConnectionStrings": {
-        "DefaultConnection": "SQL Server Connection String"
-    }
-}
-```
-
-- After that, go to the terminal, at the project root directory, follow these commands
 ```bash
-# In case you haven't install the dotnet-ef tools
-dotnet tool install --global dotnet-ef
+# Run the command
+docker compose up
 
-# Next start updating the database
-dotnet ef database update -p src/GScores.Infrastructure -s src/GScores.UI
+# To stop the server
+docker compose down
+
+# The url is now http://localhost:8080
 ```
-

@@ -1,0 +1,52 @@
+# Build outputs
+bin/
+obj/
+out/
+
+# IDE files
+.vs/
+.vscode/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Docker
+Dockerfile*
+docker-compose*
+.dockerignore
+
+# Documentation
+*.md
+README*
+
+# Logs
+logs/
+*.log
+
+# Environment files
+.env
+.env.local
+.env.development
+.env.production
+
+# Package files
+*.nupkg
+*.snupkg
+
+# Coverage reports
+coverage/
+*.coverage
+*.coveragexml
+
+# Test results
+TestResults/
+*.trx
