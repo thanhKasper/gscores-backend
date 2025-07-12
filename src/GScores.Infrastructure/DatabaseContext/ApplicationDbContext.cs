@@ -28,56 +28,55 @@ public class ApplicationDbContext(
 
     public async Task SeedDataAsync(DbContext context)
     {
+        // Because the seeding is transactional, therefore if we 
         const int BATCH_SIZE = 100000;
         int currentCount = 0;
-        HashSet<string> newForeignCodes =
-            context.Set<ForeignLanguageCode>().Select(f => f.ForeignCode!).ToHashSet();
+        HashSet<string> newForeignCodes = new();
         await foreach (var studentScore in _studentScoreReader.GetAllScoresAsync())
         {
-            // Check if student already exists
-            if (await context.Set<Student>().AnyAsync(s => s.StudentId == studentScore.StudentId))
-                continue;
 
             Student newStudent = studentScore.ToStudent();
 
-            var existingForeignCode = await context.Set<ForeignLanguageCode>()
-                .FirstOrDefaultAsync(f => f.ForeignCode == studentScore.ForeignCode);
+
+            ForeignLanguageCode? langCode = null;
 
             if (!string.IsNullOrEmpty(studentScore.ForeignCode)) // When student register a foreign lang test
             {
                 // When new foreign code is detected save change to database immediately
-                if (existingForeignCode == null &&
-                    !newForeignCodes.Contains(studentScore.ForeignCode))
+                if (!newForeignCodes.Contains(studentScore.ForeignCode))
                 {
-                    existingForeignCode = new ForeignLanguageCode
+                    langCode = new ForeignLanguageCode
                     {
                         ForeignCode = studentScore.ForeignCode
                     };
-                    context.Set<ForeignLanguageCode>().Add(existingForeignCode);
-                    newForeignCodes.Add(studentScore.ForeignCode);
-                    newStudent.ForeignLanguageCode = existingForeignCode;
-                    context.Set<Student>().Add(newStudent);
+                    context.Set<ForeignLanguageCode>().Add(langCode);
                     await context.SaveChangesAsync(); // Save changes immediately
-                    currentCount = 0; // Reset the counter after saving
-                    continue; // Skip to the next student
+                    newForeignCodes.Add(studentScore.ForeignCode);
                 }
-
+                else // The foreign code already exists
+                {
+                    langCode = await context.Set<ForeignLanguageCode>()
+                        .FindAsync(studentScore.ForeignCode);
+                }
             }
 
 
-            newStudent.ForeignLanguageCode = existingForeignCode;
+            newStudent.ForeignLanguageCode = langCode;
 
             context.Set<Student>().Add(newStudent);
-
+            // Console.WriteLine("Completed adding one student");
             currentCount++;
             if (currentCount == BATCH_SIZE)
             {
+                Console.WriteLine($"Saving batch of {BATCH_SIZE} students...");
                 await context.SaveChangesAsync();
+                context.ChangeTracker.Clear(); // Clear the change tracker to free up memory
                 currentCount = 0; // Reset the counter after saving
             }
         }
 
         await context.SaveChangesAsync(); // In case the last batch is not a full batch
+        context.ChangeTracker.Clear(); // Clear the change tracker after the final save
 
         Console.WriteLine("Seeding completed.");
         Console.WriteLine($"Total students seeded: {await context.Set<Student>().CountAsync()}");
