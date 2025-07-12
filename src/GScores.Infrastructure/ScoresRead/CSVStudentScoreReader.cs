@@ -41,17 +41,13 @@ public class CSVStudentScoreReader : IStudentScoreReader
         using (_csvReader)
         {
             _csvReader.Context.RegisterClassMap<StudentScoreMap>();
-            int testCount = 1000;
             while (await _csvReader.ReadAsync())
             {
-                if (testCount == 0)
-                    yield break;
                 var score = _csvReader.GetRecord<StudentScore>();
                 if (score != null)
                 {
                     yield return score;
                 }
-                testCount--;
             }
 
         }
