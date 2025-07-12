@@ -9,8 +9,24 @@ public class ScoreStatistics(IScoreStatisticRepositoryFactory factory) : IScoreS
 {
     private readonly IScoreStatisticRepositoryFactory _scoreStatisticRepositoryFactory = factory;
 
-    public Task<List<int>> GetStatisticTotalStudentsOfSubjectAsync(string subject)
-    {
+    public Task<List<int>> GetStatisticTotalStudentsOfSubjectAsync(string? subject)
+    {  
+        if (string.IsNullOrEmpty(subject))
+        {
+            throw new ArgumentNullException(nameof(subject), "Subject cannot be null or empty.");
+        }
+
+        List<string> VALID_SUBJECTS = new()
+        {
+            "MATH", "LITERATURE", "ENGLISH",
+            "PHYSICS", "CHEMISTRY", "BIOLOGY", "HISTORY", "GEOGRAPHY", "CIVICEDUCATION"
+        };
+        
+        if (!VALID_SUBJECTS.Contains(subject.ToUpper()))
+        {
+            throw new ArgumentException($"Invalid subject: {subject}.");
+        }
+
         IScoreStatisticRepository repository = CreateScoreStatisticRepository(subject);
         return repository.GetStatisticTotalStudentsAsync();
     }
