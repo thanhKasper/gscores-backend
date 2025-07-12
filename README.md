@@ -21,14 +21,11 @@ dotnet run --project src/GScores.UI
 To seed the csv data into the database. Please follow these steps
 
 ```json
-// Add these lines into appSettings.json or appSettings.Development.json
 {
-    //...
     "ScoresFilePath": "Your path to the csv file",
     "ConnectionStrings": {
         "DefaultConnection": "SQL Server Connection String"
     }
-    //...
 }
 ```
 
