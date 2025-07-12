@@ -28,6 +28,10 @@ public class ApplicationDbContext(
 
     public async Task SeedDataAsync(DbContext context)
     {
+        const int BATCH_SIZE = 100000;
+        int currentCount = 0;
+        HashSet<string> newForeignCodes =
+            context.Set<ForeignLanguageCode>().Select(f => f.ForeignCode!).ToHashSet();
         await foreach (var studentScore in _studentScoreReader.GetAllScoresAsync())
         {
             // Check if student already exists
@@ -39,16 +43,23 @@ public class ApplicationDbContext(
             var existingForeignCode = await context.Set<ForeignLanguageCode>()
                 .FirstOrDefaultAsync(f => f.ForeignCode == studentScore.ForeignCode);
 
-            if (!string.IsNullOrEmpty(studentScore.ForeignCode))
+            if (!string.IsNullOrEmpty(studentScore.ForeignCode)) // When student register a foreign lang test
             {
-
-                if (existingForeignCode == null)
+                // When new foreign code is detected save change to database immediately
+                if (existingForeignCode == null &&
+                    !newForeignCodes.Contains(studentScore.ForeignCode))
                 {
                     existingForeignCode = new ForeignLanguageCode
                     {
                         ForeignCode = studentScore.ForeignCode
                     };
                     context.Set<ForeignLanguageCode>().Add(existingForeignCode);
+                    newForeignCodes.Add(studentScore.ForeignCode);
+                    newStudent.ForeignLanguageCode = existingForeignCode;
+                    context.Set<Student>().Add(newStudent);
+                    await context.SaveChangesAsync(); // Save changes immediately
+                    currentCount = 0; // Reset the counter after saving
+                    continue; // Skip to the next student
                 }
 
             }
@@ -57,8 +68,15 @@ public class ApplicationDbContext(
             newStudent.ForeignLanguageCode = existingForeignCode;
 
             context.Set<Student>().Add(newStudent);
-            await context.SaveChangesAsync();
+
+            currentCount++;
+            if (currentCount == BATCH_SIZE)
+            {
+                await context.SaveChangesAsync();
+                currentCount = 0; // Reset the counter after saving
+            }
         }
 
+        await context.SaveChangesAsync(); // In case the last batch is not a full batch
     }
 }
