@@ -1,0 +1,37 @@
+services:
+  web: # the web service container that run ASP.NET Core 
+    build: .
+    container_name: aspnet_app
+    ports:
+      - "8080:8080"
+    depends_on: # Ensure that the db services is run first before the web service can run
+      - db
+        # condition: service_healthy
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__DefaultConnection=Server=db;Database=gscores;User Id=sa;Password=Thanh2007;TrustServerCertificate=True;
+      - ScoresFilePath=/app/diem_thi_thpt_2024.csv
+    networks:
+      - app-network
+    restart: on-failure
+
+  db: # the database service container that run SQL Server database
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sql_server
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Thanh2007
+      - MSSQL_PID=Express
+    ports:
+      - "6789:1433" # Use to check the docker database
+    volumes: # This will connect with the volumes in the top level 
+      - sqlserver_data:/var/opt/mssql
+    networks:
+      - app-network
+
+volumes:
+  sqlserver_data:
+
+networks: # Setting the docker network for the services
+  app-network:
+    driver: bridge
