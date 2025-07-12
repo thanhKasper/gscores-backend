@@ -18,8 +18,9 @@ dotnet build
 dotnet run --project src/GScores.UI
 ```
 
-To seed the csv data into the database. Please follow these steps
+To seed the csv data into the database. Following these steps:
 
+- Add these lines into appSettings.json or appSettings.Development.json
 ```json
 {
     "ScoresFilePath": "Your path to the csv file",
@@ -29,12 +30,12 @@ To seed the csv data into the database. Please follow these steps
 }
 ```
 
-After that, go to the terminal, at the project root directory, follow these commands
+- After that, go to the terminal, at the project root directory, follow these commands
 ```bash
 # In case you haven't install the dotnet-ef tools
 dotnet tool install --global dotnet-ef
 
 # Next start updating the database
-dotnet database update -p src/GScores.Infrastructure -s src/GScores.UI
+dotnet ef database update -p src/GScores.Infrastructure -s src/GScores.UI
 ```
 
